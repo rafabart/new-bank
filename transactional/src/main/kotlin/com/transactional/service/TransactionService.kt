@@ -2,7 +2,8 @@ package com.transactional.service
 
 import com.transactional.domain.document.Transaction
 import com.transactional.domain.request.TransactionRequest
-import com.transactional.exception.TransactionNotFound
+import com.transactional.exception.CardStatusException
+import com.transactional.exception.TransactionNotFoundException
 import com.transactional.mapper.TransactionMapper
 import com.transactional.repository.TransactionRepository
 import org.springframework.stereotype.Service
@@ -11,22 +12,29 @@ import org.springframework.stereotype.Service
 class TransactionService(
 
     val transactionMapper: TransactionMapper,
-    val transactionRepositoy: TransactionRepository
+    val transactionRepositoy: TransactionRepository,
+    val cardService: CardService
 
 ) {
 
 
     fun create(transactionRequest: TransactionRequest): Transaction {
 
-        val transaction = this.transactionMapper.toEntity(transactionRequest)
 
-        return this.transactionRepositoy.insert(transaction)
+        if (this.cardService.isValidCard(transactionRequest.cardNumber)) {
+            val transaction = this.transactionMapper.toEntity(transactionRequest)
+            return this.transactionRepositoy.insert(transaction)
+        } else {
+
+            throw CardStatusException("Cartão não esta ativo")
+        }
+
     }
 
 
     fun findById(id: String): Transaction {
         return this.transactionRepositoy.findById(id)
-            .orElseThrow { TransactionNotFound("Transação não encontrado. Id = $id") }
+            .orElseThrow { TransactionNotFoundException("Transação não encontrado. Id = $id") }
     }
 
 

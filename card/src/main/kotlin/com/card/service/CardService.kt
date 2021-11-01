@@ -3,7 +3,7 @@ package com.card.service
 import com.card.domain.document.Card
 import com.card.domain.request.CardRequest
 import com.card.domain.request.CardStatusRequest
-import com.card.exception.CardNotFound
+import com.card.exception.CardNotFoundException
 import com.card.mapper.CardMapper
 import com.card.repository.CardRepositoy
 import com.card.util.CardNumberGenerator
@@ -29,44 +29,35 @@ class CardService(
     }
 
 
-    fun findByCardNumber(cardNumber: String): Optional<Card> {
-        return Optional.of(cardNumber)
-            .map(cardRepositoy::findByCardNumber)
-            .orElseThrow { CardNotFound("Cartão não encontrado. Número do Cartão = $cardNumber") }
+    fun findByCardNumber(cardNumber: String): Card {
+        return this.cardRepositoy.findByCardNumber(cardNumber)
+            .orElseThrow { CardNotFoundException("Cartão não encontrado. Número do Cartão = $cardNumber") }
     }
 
 
-    fun findById(id: String): Optional<Card> {
-        return Optional.of(id)
-            .map(cardRepositoy::findById)
-            .orElseThrow { CardNotFound("Cartão não encontrado. Id = $id") }
+    fun findById(id: String): Card {
+        return this.cardRepositoy.findById(id)
+            .orElseThrow { CardNotFoundException("Cartão não encontrado. Id = $id") }
     }
 
 
-    fun updateStatus(cardStatusRequest: CardStatusRequest): Optional<Card> {
+    fun updateStatus(cardStatusRequest: CardStatusRequest): Card {
         return Optional.of(cardStatusRequest)
             .map(CardStatusRequest::cardNumber)
             .map(this::findByCardNumber)
-            .map { c -> this.cardMapper.updateStatus(cardStatusRequest, c.get()) }
+            .map { c -> this.cardMapper.updateStatus(cardStatusRequest, c) }
             .map(cardRepositoy::save)
+            .get()
     }
 
 
     private fun getValidNewCardNumber(): String {
 
-        var validCardNumber = false
-        var newCardNumber = ""
+        val newCardNumber = CardNumberGenerator.generate()
 
-        while (!validCardNumber) {
-
-            newCardNumber = CardNumberGenerator.generate()
-
-            if (this.cardRepositoy.findByCardNumber(newCardNumber).isEmpty)
-                validCardNumber = true
-
-        }
+        if (this.cardRepositoy.findByCardNumber(newCardNumber).isPresent)
+            return getValidNewCardNumber()
 
         return newCardNumber
     }
-
 }
