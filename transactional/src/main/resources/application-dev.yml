@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://adminMongo:1234qwer@contactkeeper.ixcdp.mongodb.net/transaction?retryWrites=true&w=majority

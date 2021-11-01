@@ -1,0 +1,7 @@
+server:
+  port: ${PORT:8081}
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://adminMongo:1234qwer@contactkeeper.ixcdp.mongodb.net/card?retryWrites=true&w=majority

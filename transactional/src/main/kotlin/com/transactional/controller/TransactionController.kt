@@ -6,6 +6,7 @@ import com.transactional.mapper.TransactionMapper
 import com.transactional.service.TransactionService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping("transactions")
@@ -18,15 +19,18 @@ class TransactionController(
 
 
     @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
     fun getTransactionById(@PathVariable id: String): TransactionResponse {
 
-        val transaction = this.transactionService.findById(id)
-
-        return this.transactionMapper.toResponse(transaction)
+        return Optional.of(id)
+            .map(transactionService::findById)
+            .map(transactionMapper::toResponse)
+            .get()
     }
 
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     fun getTransactionByCard(@RequestParam cardNumber: String): List<TransactionResponse> {
 
         return this.transactionService.getAllByCardNumber(cardNumber)
@@ -38,8 +42,9 @@ class TransactionController(
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody transactionRequest: TransactionRequest): TransactionResponse {
 
-        val response = this.transactionService.create(transactionRequest)
-
-        return this.transactionMapper.toResponse(response)
+        return Optional.of(transactionRequest)
+            .map(transactionService::create)
+            .map(transactionMapper::toResponse)
+            .get()
     }
 }
