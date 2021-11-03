@@ -14,10 +14,6 @@ data class Benefit(
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Long? = null,
 
-    //TODO: Criar uma entidade para o Cartão e fazer um relacionamento ManyToMany
-    @Column(unique = true)
-    val cardNumber: String,
-
     val title: String,
 
     val description: String,

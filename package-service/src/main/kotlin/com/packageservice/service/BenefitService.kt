@@ -1,4 +1,4 @@
-package com.packageservice
+package com.packageservice.service
 
 import com.packageservice.domain.entity.Benefit
 import com.packageservice.domain.request.BenefitRequest
@@ -23,12 +23,6 @@ class BenefitService(
             .map(benefitMapper::toEntity)
             .map(benefitRepository::save)
             .get()
-    }
-
-
-    fun findByCardNumber(cardNumber: String): Benefit {
-        return this.benefitRepository.findByCardNumber(cardNumber)
-            .orElseThrow { BenefitNotFoundException("Benefício não encontrado. Número do cartão: $cardNumber") }
     }
 
 

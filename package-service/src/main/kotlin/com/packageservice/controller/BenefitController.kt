@@ -1,9 +1,9 @@
 package com.packageservice.controller
 
-import com.packageservice.BenefitService
 import com.packageservice.domain.request.BenefitRequest
 import com.packageservice.domain.response.BenefitResponse
 import com.packageservice.mapper.BenefitMapper
+import com.packageservice.service.BenefitService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -24,16 +24,6 @@ class BenefitController(
     fun create(@RequestBody benefitRequest: BenefitRequest): BenefitResponse {
         return Optional.of(benefitRequest)
             .map(benefitService::create)
-            .map(benefitMapper::toReponse)
-            .get()
-    }
-
-
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    fun findByCardNumber(@RequestParam cardNumber: String): BenefitResponse {
-        return Optional.of(cardNumber)
-            .map(benefitService::findByCardNumber)
             .map(benefitMapper::toReponse)
             .get()
     }

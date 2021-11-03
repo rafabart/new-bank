@@ -8,8 +8,6 @@ data class BenefitResponse(
 
     val id: Long?,
 
-    val cardNumber: String,
-
     val title: String,
 
     val description: String,

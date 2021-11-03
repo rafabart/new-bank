@@ -11,7 +11,6 @@ class BenefitMapper {
 
     fun toEntity(benefitRequest: BenefitRequest): Benefit {
         return Benefit(
-            cardNumber = benefitRequest.cardNumber,
             title = benefitRequest.title,
             description = benefitRequest.description,
             price = benefitRequest.price,
@@ -24,7 +23,6 @@ class BenefitMapper {
     fun toReponse(benefit: Benefit): BenefitResponse {
         return BenefitResponse(
             id = benefit.id,
-            cardNumber = benefit.cardNumber,
             title = benefit.title,
             description = benefit.description,
             price = benefit.price,
@@ -39,7 +37,6 @@ class BenefitMapper {
     fun toActiveStatus(benefit: Benefit): Benefit {
         return Benefit(
             id = benefit.id,
-            cardNumber = benefit.cardNumber,
             title = benefit.title,
             description = benefit.description,
             price = benefit.price,
@@ -54,7 +51,6 @@ class BenefitMapper {
     fun toInactiveStatus(benefit: Benefit): Benefit {
         return Benefit(
             id = benefit.id,
-            cardNumber = benefit.cardNumber,
             title = benefit.title,
             description = benefit.description,
             price = benefit.price,

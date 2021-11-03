@@ -5,8 +5,6 @@ import java.math.BigDecimal
 
 data class BenefitRequest(
 
-    val cardNumber: String,
-
     val title: String,
 
     val description: String,
