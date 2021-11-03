@@ -19,9 +19,11 @@ class TransactionMapper {
         )
     }
 
+
     fun toResponse(transaction: Transaction): TransactionResponse {
         return TransactionResponse(
             id = transaction.id,
+            value = transaction.value,
             status = transaction.status,
             createAt = transaction.createAt
         )

@@ -6,6 +6,7 @@ import com.transactional.exception.CardStatusException
 import com.transactional.exception.TransactionNotFoundException
 import com.transactional.mapper.TransactionMapper
 import com.transactional.repository.TransactionRepository
+import de.jupf.staticlog.Log
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,13 +21,14 @@ class TransactionService(
 
     fun create(transactionRequest: TransactionRequest): Transaction {
 
-
         if (this.cardService.isValidCard(transactionRequest.cardNumber)) {
+
             val transaction = this.transactionMapper.toEntity(transactionRequest)
             return this.transactionRepositoy.insert(transaction)
-        } else {
 
-            throw CardStatusException("Cartão não esta ativo")
+        } else {
+            Log.warn("Cartão não esta ativo. Número do cartão: ${transactionRequest.cardNumber}")
+            throw CardStatusException("Cartão não esta ativo. Número do cartão: ${transactionRequest.cardNumber}")
         }
 
     }

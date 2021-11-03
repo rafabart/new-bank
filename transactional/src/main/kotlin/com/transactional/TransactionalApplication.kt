@@ -9,5 +9,5 @@ import org.springframework.cloud.openfeign.EnableFeignClients
 class TransactionalApplication
 
 fun main(args: Array<String>) {
-	runApplication<TransactionalApplication>(*args)
+    runApplication<TransactionalApplication>(*args)
 }

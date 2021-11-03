@@ -2,14 +2,18 @@ package com.transactional.client
 
 import com.transactional.domain.response.CardClientResponse
 import org.springframework.cloud.openfeign.FeignClient
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 
-@FeignClient(value = "cards", url = "http://localhost:8081/cards", fallback = CardClientFallback::class)
+@FeignClient(
+    value = "\${client.card-api.value}",
+    url = "\${client.card-api.url}"
+)
 interface CardClient {
 
 
-    @RequestMapping(method = [RequestMethod.GET], consumes = ["application/json"])
+    @RequestMapping(method = [RequestMethod.GET], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun findByCardNumber(@RequestParam cardNumber: String): CardClientResponse
 }

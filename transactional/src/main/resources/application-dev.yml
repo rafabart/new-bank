@@ -6,3 +6,8 @@ spring:
 feign:
   hystrix:
     enabled: true
+
+client:
+  card-api:
+    value: cards
+    url: http://localhost:8081/cards
