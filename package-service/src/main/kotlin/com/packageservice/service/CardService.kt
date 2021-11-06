@@ -6,6 +6,7 @@ import com.packageservice.exception.CardNotFoundException
 import com.packageservice.mapper.CardMapper
 import com.packageservice.repository.CardRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
@@ -18,6 +19,7 @@ class CardService(
 ) {
 
 
+    @Transactional
     fun create(cardRequest: CardRequest): Card {
         return Optional.of(cardRequest)
             .map(cardMapper::toEntity)
@@ -32,10 +34,15 @@ class CardService(
     }
 
 
+    @Transactional
     fun addBenefits(
         cardNumber: String,
         benefitId: Long
     ): Card {
+
+//        TODO: Validar se já não existe o beneficio no objeto card encontrado no banco.
+//        TODO: Adicionar flyway
+
         return Optional.of(cardNumber)
             .map {
                 this.cardMapper.updateCardBenefits(
@@ -46,6 +53,4 @@ class CardService(
             .map(cardRepository::save)
             .get()
     }
-
-
 }

@@ -15,14 +15,17 @@ data class Card(
     @Column(unique = true)
     val cardNumber: String,
 
-    @ManyToMany
-    //TODO: Corrigir essa relação. No projeto do e-commerce tem algo parecido com essa relação
-    var benefits: Set<Benefit>? = HashSet(),
+    @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @JoinTable(
+        name = "card_benefit",
+        joinColumns = [JoinColumn(name = "cards_id")],
+        inverseJoinColumns = [JoinColumn(name = "benefits_id")]
+    )
+    var benefits: MutableList<Benefit> = mutableListOf(),
 
     @CreationTimestamp
     var createAt: LocalDateTime? = null,
 
     @UpdateTimestamp
     var updatedAt: LocalDateTime? = null
-
 )

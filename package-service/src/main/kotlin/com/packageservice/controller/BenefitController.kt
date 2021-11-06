@@ -10,7 +10,7 @@ import java.util.*
 
 
 @RestController
-@RequestMapping("benefit")
+@RequestMapping("benefits")
 class BenefitController(
 
     val benefitMapper: BenefitMapper,
@@ -24,6 +24,16 @@ class BenefitController(
     fun create(@RequestBody benefitRequest: BenefitRequest): BenefitResponse {
         return Optional.of(benefitRequest)
             .map(benefitService::create)
+            .map(benefitMapper::toReponse)
+            .get()
+    }
+
+
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun findById(@PathVariable id: Long): BenefitResponse {
+        return Optional.of(id)
+            .map(benefitService::findById)
             .map(benefitMapper::toReponse)
             .get()
     }

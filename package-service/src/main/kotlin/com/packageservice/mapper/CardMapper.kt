@@ -31,7 +31,7 @@ class CardMapper {
         return Card(
             id = card.id,
             cardNumber = card.cardNumber,
-            benefits = card.benefits?.plus(benefit),
+            benefits = card.benefits.plus(benefit).toMutableList(),
             createAt = card.createAt,
             updatedAt = card.updatedAt
         )
