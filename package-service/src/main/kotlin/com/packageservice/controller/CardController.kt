@@ -3,8 +3,12 @@ package com.packageservice.controller
 import com.packageservice.domain.request.CardRequest
 import com.packageservice.domain.response.CardResponse
 import com.packageservice.mapper.CardMapper
+import com.packageservice.message.CardConsumer.Companion.CARD_TOPIC_OUT
 import com.packageservice.service.CardService
+import org.springframework.cloud.stream.function.StreamBridge
 import org.springframework.http.HttpStatus
+import org.springframework.kafka.support.KafkaHeaders
+import org.springframework.messaging.support.MessageBuilder
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -13,7 +17,8 @@ import java.util.*
 class CardController(
 
     val cardMapper: CardMapper,
-    val cardService: CardService
+    val cardService: CardService,
+    val streamBridge: StreamBridge
 
 ) {
 
@@ -24,6 +29,23 @@ class CardController(
             .map(cardService::create)
             .map(cardMapper::toResponse)
             .get()
+    }
+
+
+    @PostMapping("kafka")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun sendToKafka(@RequestBody cardRequest: CardRequest) {
+        Optional.of(cardRequest)
+            .map { MessageBuilder.withPayload(cardRequest) }
+            .map {
+                it.setHeader(
+                    KafkaHeaders.MESSAGE_KEY,
+                    cardRequest.cardNumber.toByteArray(Charsets.UTF_8)
+                )
+            }
+            .map { it.build() }
+            .map { this.streamBridge.send(CARD_TOPIC_OUT, it) }
+
     }
 
 
