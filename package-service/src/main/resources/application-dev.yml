@@ -26,6 +26,11 @@ spring:
   cloud:
     stream:
       kafka:
+        bindings:
+          cardTopic-in-0:
+            consumer:
+              enableDlq: true
+              dlqName: card-topic-dlq
         streams:
           binder:
             applicationId: ${spring.application.name}
@@ -41,3 +46,7 @@ spring:
         cardTopic-in-0:
           destination: card-topic
           group: ${spring.application.name}
+          consumer:
+            maxAttempts: 3
+            backOffInitialInterval: 3000
+            backOffMultipler: 2
