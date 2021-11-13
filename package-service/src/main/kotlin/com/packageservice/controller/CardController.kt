@@ -3,7 +3,6 @@ package com.packageservice.controller
 import com.packageservice.domain.request.CardRequest
 import com.packageservice.domain.response.CardResponse
 import com.packageservice.mapper.CardMapper
-import com.packageservice.message.CardConsumer.Companion.CARD_TOPIC_OUT
 import com.packageservice.service.CardService
 import org.springframework.cloud.stream.function.StreamBridge
 import org.springframework.http.HttpStatus
@@ -21,6 +20,10 @@ class CardController(
     val streamBridge: StreamBridge
 
 ) {
+
+    companion object {
+        const val CARD_TOPIC_OUT = "card-topic"
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

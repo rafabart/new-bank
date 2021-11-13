@@ -34,6 +34,12 @@ class CardService(
     }
 
 
+    fun hasCardNumberInDatabase(cardNumber: String): Boolean {
+        return this.cardRepository.findByCardNumber(cardNumber)
+            .isPresent
+    }
+
+
     @Transactional
     fun addBenefits(
         cardNumber: String,
