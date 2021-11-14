@@ -48,4 +48,14 @@ class BenefitService(
             .map(benefitMapper::toInactiveStatus)
             .map(benefitRepository::save)
     }
+
+
+    @Transactional
+    fun update(id: Long, benefitRequest: BenefitRequest): Benefit {
+        return Optional.of(id)
+            .map(this::findById)
+            .map { this.benefitMapper.updateFromRequest(it, benefitRequest) }
+            .map(benefitRepository::save)
+            .get()
+    }
 }

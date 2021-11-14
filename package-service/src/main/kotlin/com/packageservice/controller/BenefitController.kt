@@ -55,4 +55,17 @@ class BenefitController(
             .map(benefitService::inactiveBenefit)
             .get()
     }
+
+
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun update(
+        @PathVariable id: Long,
+        @RequestBody benefitRequest: BenefitRequest
+    ): BenefitResponse {
+        return Optional.of(id)
+            .map { this.benefitService.update(id, benefitRequest) }
+            .map(benefitMapper::toReponse)
+            .get()
+    }
 }

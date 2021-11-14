@@ -4,11 +4,13 @@ import com.packageservice.domain.request.CardRequest
 import com.packageservice.domain.response.CardResponse
 import com.packageservice.mapper.CardMapper
 import com.packageservice.service.CardService
+import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
+@Profile("dev")
 @RequestMapping("cards")
 class CardController(
 
@@ -39,12 +41,12 @@ class CardController(
 
     @PutMapping("{cardNumber}")
     @ResponseStatus(HttpStatus.OK)
-    fun updateCardBenefits(
+    fun addCardBenefits(
         @PathVariable cardNumber: String,
         @RequestBody benefitId: Long
     ): CardResponse {
         return Optional.of(cardNumber)
-            .map { this.cardService.addBenefits(cardNumber, benefitId) }
+            .map { this.cardService.addCardBenefits(cardNumber, benefitId) }
             .map(cardMapper::toResponse)
             .get()
     }
