@@ -6,6 +6,7 @@ import com.packageservice.exception.CardNotFoundException
 import com.packageservice.exception.RepeatedBenefitOnCardException
 import com.packageservice.mapper.CardMapper
 import com.packageservice.repository.CardRepository
+import com.packageservice.util.Log
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -18,6 +19,7 @@ class CardService(
     val cardMapper: CardMapper
 
 ) {
+    companion object : Log()
 
 
     @Transactional
@@ -31,7 +33,10 @@ class CardService(
 
     fun findByCardNumber(cardNumber: String): Card {
         return this.cardRepository.findByCardNumber(cardNumber)
-            .orElseThrow { CardNotFoundException("Cartão não encontrado. Número do cartão: $cardNumber") }
+            .orElseThrow {
+                logger.info("[CardService][findByCardNumber]: Cartão não encontrado. Número do cartão: $cardNumber")
+                CardNotFoundException("Cartão não encontrado. Número do cartão: $cardNumber")
+            }
     }
 
 
@@ -47,23 +52,41 @@ class CardService(
         benefitId: Long
     ): Card {
 
-//        TODO: Adicionar consumer kafka para receber o cartão novo quando criado na api card-api
-//        TODO: Adicionar endpoint para remover beneficio de um cartão
-        val hasBenefitOnCard = findByCardNumber(cardNumber).benefits.none { it.id == benefitId }.not()
-
-        if (hasBenefitOnCard.not()) {
-            return Optional.of(cardNumber)
-                .map {
-                    this.cardMapper.updateCardBenefits(
-                        this.findByCardNumber(cardNumber),
-                        this.benefitService.findById(benefitId)
-                    )
-                }
-                .map(cardRepository::save)
-                .get()
-
-        } else {
+        if (this.findByCardNumber(cardNumber).benefits.any { it.id == benefitId }) {
+            logger.info("[CardService][addCardBenefits]: Benefício (id = $benefitId) já presente no cartão (Número do cartão = $cardNumber)")
             throw RepeatedBenefitOnCardException("Benefício (id = $benefitId) já presente no cartão (Número do cartão = $cardNumber)")
         }
+
+        return Optional.of(cardNumber)
+            .map {
+                this.cardMapper.addCardBenefits(
+                    this.findByCardNumber(cardNumber),
+                    this.benefitService.findById(benefitId)
+                )
+            }
+            .map(cardRepository::save)
+            .get()
+    }
+
+
+    fun removeCardBenefits(
+        cardNumber: String,
+        benefitId: Long
+    ): Card {
+
+        if (this.findByCardNumber(cardNumber).benefits.none { it.id == benefitId }) {
+            logger.info("[CardService][removeCardBenefits]: Benefício (id = $benefitId) não presente no cartão (Número do cartão = $cardNumber)")
+            throw RepeatedBenefitOnCardException("Benefício (id = $benefitId) não presente no cartão (Número do cartão = $cardNumber)")
+        }
+
+        return Optional.of(cardNumber)
+            .map {
+                this.cardMapper.removeCardBenefits(
+                    this.findByCardNumber(cardNumber),
+                    this.benefitService.findById(benefitId)
+                )
+            }
+            .map(cardRepository::save)
+            .get()
     }
 }

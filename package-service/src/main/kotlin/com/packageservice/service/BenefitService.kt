@@ -5,6 +5,7 @@ import com.packageservice.domain.request.BenefitRequest
 import com.packageservice.exception.BenefitNotFoundException
 import com.packageservice.mapper.BenefitMapper
 import com.packageservice.repository.BenefitRepository
+import com.packageservice.util.Log
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -15,6 +16,7 @@ class BenefitService(
     val benefitMapper: BenefitMapper,
     val benefitRepository: BenefitRepository
 ) {
+    companion object : Log()
 
 
     @Transactional
@@ -28,7 +30,10 @@ class BenefitService(
 
     fun findById(id: Long): Benefit {
         return this.benefitRepository.findById(id)
-            .orElseThrow { BenefitNotFoundException("Benefício não encontrado. Id: $id") }
+            .orElseThrow {
+                logger.info("[BenefitService][findById]: Benefício não encontrado. Id: $id")
+                BenefitNotFoundException("Benefício não encontrado. Id: $id")
+            }
     }
 
 

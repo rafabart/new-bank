@@ -25,6 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
+    implementation("org.flywaydb:flyway-core")
 
     runtimeOnly("org.postgresql:postgresql")
 

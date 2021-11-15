@@ -27,11 +27,21 @@ class CardMapper {
     }
 
 
-    fun updateCardBenefits(card: Card, benefit: Benefit): Card {
+    fun addCardBenefits(card: Card, benefit: Benefit): Card {
         return Card(
             id = card.id,
             cardNumber = card.cardNumber,
-            benefits = card.benefits.plus(benefit).toMutableList(),
+            benefits = card.benefits.plus(benefit).toMutableSet(),
+            createAt = card.createAt
+        )
+    }
+
+
+    fun removeCardBenefits(card: Card, benefit: Benefit): Card {
+        return Card(
+            id = card.id,
+            cardNumber = card.cardNumber,
+            benefits = card.benefits.filter { it != benefit }.toMutableSet(),
             createAt = card.createAt
         )
     }

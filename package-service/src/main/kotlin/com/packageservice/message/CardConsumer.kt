@@ -17,6 +17,7 @@ class CardConsumer(
 
     companion object : Log()
 
+
     @Bean
     fun cardTopic(): Consumer<CardRequest> = Consumer { card ->
 

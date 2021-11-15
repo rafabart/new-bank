@@ -4,8 +4,8 @@ import com.packageservice.domain.request.CardRequest
 import com.packageservice.domain.response.CardResponse
 import com.packageservice.mapper.CardMapper
 import com.packageservice.service.CardService
-import org.springframework.context.annotation.Profile
 import org.springframework.cloud.stream.function.StreamBridge
+import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.kafka.support.KafkaHeaders
 import org.springframework.messaging.support.MessageBuilder
@@ -64,7 +64,7 @@ class CardController(
     }
 
 
-    @PutMapping("{cardNumber}")
+    @PutMapping("addCardBenefits/{cardNumber}")
     @ResponseStatus(HttpStatus.OK)
     fun addCardBenefits(
         @PathVariable cardNumber: String,
@@ -72,6 +72,19 @@ class CardController(
     ): CardResponse {
         return Optional.of(cardNumber)
             .map { this.cardService.addCardBenefits(cardNumber, benefitId) }
+            .map(cardMapper::toResponse)
+            .get()
+    }
+
+
+    @PutMapping("removeCardBenefits/{cardNumber}")
+    @ResponseStatus(HttpStatus.OK)
+    fun removeCardBenefits(
+        @PathVariable cardNumber: String,
+        @RequestBody benefitId: Long
+    ): CardResponse {
+        return Optional.of(cardNumber)
+            .map { this.cardService.removeCardBenefits(cardNumber, benefitId) }
             .map(cardMapper::toResponse)
             .get()
     }
