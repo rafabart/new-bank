@@ -9,7 +9,7 @@ data class CardResponse(
 
     val cardNumber: String,
 
-    var benefits: MutableList<Benefit>?,
+    var benefits: MutableSet<Benefit>?,
 
     var createAt: LocalDateTime?,
 

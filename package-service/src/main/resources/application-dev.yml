@@ -2,6 +2,9 @@ server:
   port: ${PORT:8082}
 
 spring:
+  application:
+    name: package-service-api
+
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/postgres
@@ -27,3 +30,31 @@ spring:
 #              create-source: metadata
     hibernate:
       ddl-auto: none
+
+  cloud:
+    stream:
+      kafka:
+        bindings:
+          cardTopic-in-0:
+            consumer:
+              enableDlq: true
+              dlqName: card-topic-dlq
+        streams:
+          binder:
+            applicationId: ${spring.application.name}
+        binder:
+          brokers: localhost:9092
+      function:
+        definition: cardTopic;
+
+      bindings:
+        card-topic-out-0:
+          destination: card-topic
+
+        cardTopic-in-0:
+          destination: card-topic
+          group: ${spring.application.name}
+          consumer:
+            maxAttempts: 3
+            backOffInitialInterval: 3000
+            backOffMultipler: 2

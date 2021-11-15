@@ -4,7 +4,6 @@ import com.packageservice.domain.response.ErrorResponse
 import com.packageservice.exception.BenefitNotFoundException
 import com.packageservice.exception.CardNotFoundException
 import com.packageservice.exception.RepeatedBenefitOnCardException
-import de.jupf.staticlog.Log
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -22,8 +21,6 @@ class ExceptionHandlerController {
         request: HttpServletRequest
     ): ErrorResponse {
 
-        exception.message?.let { Log.warn(it) }
-
         return ErrorResponse(
             status = HttpStatus.NOT_FOUND.value(),
             error = HttpStatus.NOT_FOUND.name,
@@ -40,8 +37,6 @@ class ExceptionHandlerController {
         request: HttpServletRequest
     ): ErrorResponse {
 
-        exception.message?.let { Log.warn(it) }
-
         return ErrorResponse(
             status = HttpStatus.NOT_FOUND.value(),
             error = HttpStatus.NOT_FOUND.name,
@@ -57,8 +52,6 @@ class ExceptionHandlerController {
         exception: RepeatedBenefitOnCardException,
         request: HttpServletRequest
     ): ErrorResponse {
-
-        exception.message?.let { Log.warn(it) }
 
         return ErrorResponse(
             status = HttpStatus.CONFLICT.value(),

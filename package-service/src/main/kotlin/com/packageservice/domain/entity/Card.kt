@@ -21,7 +21,7 @@ data class Card(
         joinColumns = [JoinColumn(name = "cards_id")],
         inverseJoinColumns = [JoinColumn(name = "benefits_id")]
     )
-    var benefits: MutableList<Benefit> = mutableListOf(),
+    var benefits: MutableSet<Benefit> = mutableSetOf(),
 
     @CreationTimestamp
     var createAt: LocalDateTime? = null,
