@@ -3,6 +3,7 @@ package com.packageservice.service
 import com.packageservice.domain.entity.Card
 import com.packageservice.domain.request.CardRequest
 import com.packageservice.exception.CardNotFoundException
+import com.packageservice.exception.RepeatedBenefitOnCardException
 import com.packageservice.mapper.CardMapper
 import com.packageservice.repository.CardRepository
 import org.springframework.stereotype.Service
@@ -41,22 +42,28 @@ class CardService(
 
 
     @Transactional
-    fun addBenefits(
+    fun addCardBenefits(
         cardNumber: String,
         benefitId: Long
     ): Card {
 
-//        TODO: Validar se já não existe o beneficio no objeto card encontrado no banco.
-//        TODO: Adicionar flyway
+//        TODO: Adicionar consumer kafka para receber o cartão novo quando criado na api card-api
+//        TODO: Adicionar endpoint para remover beneficio de um cartão
+        val hasBenefitOnCard = findByCardNumber(cardNumber).benefits.none { it.id == benefitId }.not()
 
-        return Optional.of(cardNumber)
-            .map {
-                this.cardMapper.updateCardBenefits(
-                    this.findByCardNumber(cardNumber),
-                    this.benefitService.findById(benefitId)
-                )
-            }
-            .map(cardRepository::save)
-            .get()
+        if (hasBenefitOnCard.not()) {
+            return Optional.of(cardNumber)
+                .map {
+                    this.cardMapper.updateCardBenefits(
+                        this.findByCardNumber(cardNumber),
+                        this.benefitService.findById(benefitId)
+                    )
+                }
+                .map(cardRepository::save)
+                .get()
+
+        } else {
+            throw RepeatedBenefitOnCardException("Benefício (id = $benefitId) já presente no cartão (Número do cartão = $cardNumber)")
+        }
     }
 }

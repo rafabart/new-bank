@@ -42,7 +42,6 @@ class BenefitMapper {
             price = benefit.price,
             taxCycle = benefit.taxCycle,
             createAt = benefit.createAt,
-            updatedAt = benefit.updatedAt,
             active = true
         )
     }
@@ -56,8 +55,20 @@ class BenefitMapper {
             price = benefit.price,
             taxCycle = benefit.taxCycle,
             createAt = benefit.createAt,
-            updatedAt = benefit.updatedAt,
             active = false
+        )
+    }
+
+
+    fun updateFromRequest(benefit: Benefit, benefitRequest: BenefitRequest): Benefit {
+        return Benefit(
+            id = benefit.id,
+            title = benefitRequest.title,
+            description = benefitRequest.description,
+            price = benefitRequest.price,
+            taxCycle = benefitRequest.taxCycle,
+            createAt = benefit.createAt,
+            active = benefitRequest.active
         )
     }
 }

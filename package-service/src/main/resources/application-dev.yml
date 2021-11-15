@@ -20,6 +20,14 @@ spring:
     properties:
       hibernate:
         format_sql: true
+      #javax.persistence.schema-generation -> Essas configs servem para gerar os scripts sql que podem ser usados nos arquivos do flyway
+#      javax:
+#        persistence:
+#          schema-generation:
+#            scripts:
+#              action: create
+#              create-target: create.sql
+#              create-source: metadata
     hibernate:
       ddl-auto: create-drop
 
