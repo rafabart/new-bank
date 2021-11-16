@@ -58,3 +58,9 @@ spring:
             maxAttempts: 3
             backOffInitialInterval: 3000
             backOffMultipler: 2
+
+
+# TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+logging.level.org.springframework.cloud.stream: ERROR
+logging.level.org.apache.kafka: ERROR
+logging.level.o.a.k.clients.producer: ERROR
