@@ -1,0 +1,37 @@
+server:
+  port: ${PORT:8083}
+
+spring:
+  application:
+    name: package-service-api
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/customers
+    username: postgres
+    password: 12qwaszx
+
+
+  jpa:
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: true
+    properties:
+      hibernate:
+        format_sql: true
+      #javax.persistence.schema-generation -> Essas configs servem para gerar os scripts sql que podem ser usados nos arquivos do flyway
+    #      javax:
+    #        persistence:
+    #          schema-generation:
+    #            scripts:
+    #              action: create
+    #              create-target: create.sql
+    #              create-source: metadata
+    hibernate:
+      ddl-auto: create-drop
+
+client:
+  card-api:
+    value: cards
+    url: http://localhost:8081/cards
