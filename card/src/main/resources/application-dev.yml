@@ -4,4 +4,28 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://adminMongo:1234qwer@contactkeeper.ixcdp.mongodb.net/card?retryWrites=true&w=majority
+      #      uri: mongodb+srv://adminMongo:12qwaszx@cards.ixcdp.mongodb.net/card?retryWrites=true&w=majority
+      uri: mongodb://adminMongo:12qwaszx@localhost:27017/cards
+  #    user: adminMongo
+  #    password: 12qwaszx
+  #    uri: localhost:27017/cards
+
+  cloud:
+    stream:
+      kafka:
+        streams:
+          binder:
+            applicationId: ${spring.application.name}
+        binder:
+          brokers: localhost:9092
+
+      bindings:
+        card-topic-out-0:
+          destination: card-topic
+          group: ${spring.application.name}
+
+
+# TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+logging.level.org.springframework.cloud.stream: ERROR
+logging.level.org.apache.kafka: ERROR
+logging.level.o.a.k.clients.producer: ERROR

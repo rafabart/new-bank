@@ -28,5 +28,8 @@ class CardConsumer(
 
         Optional.of(card)
             .map(cardService::create)
+            .ifPresent {
+                logger.info("[CardConsumer][cardTopic]: Novo cartão persistido com sucesso. Número do cartão: ${card.cardNumber}")
+            }
     }
 }
