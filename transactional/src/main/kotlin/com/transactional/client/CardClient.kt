@@ -15,5 +15,5 @@ interface CardClient {
 
 
     @RequestMapping(method = [RequestMethod.GET], consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun findByCardNumber(@RequestParam cardNumber: String): CardClientResponse
+    fun createCard(@RequestParam cardNumber: String): CardClientResponse
 }
