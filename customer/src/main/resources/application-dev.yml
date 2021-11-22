@@ -29,7 +29,7 @@ spring:
 #              create-target: create.sql
 #              create-source: metadata
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
 
 client:
   card-api:

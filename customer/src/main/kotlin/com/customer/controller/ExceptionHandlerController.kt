@@ -1,9 +1,9 @@
 package com.customer.controller
 
 import com.customer.domain.response.ErrorResponse
+import com.customer.exception.CardGenerationFailException
 import com.customer.exception.CustomerNotFoundException
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper
-import org.springframework.dao.DataIntegrityViolationException
+import feign.RetryableException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -41,6 +41,37 @@ class ExceptionHandlerController {
         return ErrorResponse(
             status = HttpStatus.CONFLICT.value(),
             error = HttpStatus.CONFLICT.name,
+            message = exception.message,
+            path = request.requestURI
+        )
+    }
+
+
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    @ExceptionHandler(CardGenerationFailException::class)
+    fun handleCardGenerationFailException(
+        exception: CardGenerationFailException,
+        request: HttpServletRequest
+    ): ErrorResponse {
+
+        return ErrorResponse(
+            status = HttpStatus.SERVICE_UNAVAILABLE.value(),
+            error = HttpStatus.SERVICE_UNAVAILABLE.name,
+            message = exception.message,
+            path = request.requestURI
+        )
+    }
+
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    @ExceptionHandler(RetryableException::class)
+    fun handleRetryableException(
+        exception: RetryableException,
+        request: HttpServletRequest
+    ): ErrorResponse {
+
+        return ErrorResponse(
+            status = HttpStatus.SERVICE_UNAVAILABLE.value(),
+            error = HttpStatus.SERVICE_UNAVAILABLE.name,
             message = exception.message,
             path = request.requestURI
         )

@@ -4,7 +4,7 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -34,4 +34,9 @@ data class Customer(
 
     @UpdateTimestamp
     var updatedAt: LocalDateTime? = null,
-)
+) {
+
+    override fun toString(): String {
+        return "Customer(id=$id, email='$email', name='$name', cnpj=$cnpj, cpf=$cpf, createAt=$createAt, updatedAt=$updatedAt)"
+    }
+}
