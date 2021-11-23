@@ -1,0 +1,9 @@
+#Essa api vai subistituir o package-service.
+#Ela vai gerenciar o limite de uma cartão de crédito
+#Vai receber do card-api um número de cartão e vai salvar no banco com um limite de crédito inicial. Ex: 1000,00
+#Vai ter endpoint para alterar esse limite.
+# A entidade vai ter um id, cardNumber, limit(Double?),limitUsed(Total usado do limite)
+# vai ter um client para integrar com statement e mandar a proposta de crédito em x vezes, caso de timeout chamar o fallback
+#que sera um topico kafka
+
+#Provalvemente sera necessário alterar a customer-api e card-api para inserir/configurar o dia de vencimento do cartão de crédito
